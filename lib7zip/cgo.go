@@ -9,7 +9,6 @@ import "C"
 import (
 	"errors"
 	"reflect"
-	"runtime"
 	"time"
 	"unicode/utf16"
 	"unsafe"
@@ -127,10 +126,6 @@ func (lib *Library) Close() {
 	lib.l = nil
 }
 
-func (lib *Library) finalizer(*Library) {
-	lib.Close()
-}
-
 func NewLibrary() (*Library, error) {
 	l := C.create_C7ZipLibrary()
 	if getBool(C.c7zLib_Initialize(l)) == false {
@@ -139,7 +134,6 @@ func NewLibrary() (*Library, error) {
 		return nil, err
 	}
 	lib := &Library{l}
-	runtime.SetFinalizer(lib, lib.finalizer)
 	return lib, nil
 }
 
@@ -170,7 +164,6 @@ func (lib *Library) Open(r Reader) (*Archive, error) {
 	if getBool(C.lib7zip_open_archive(unsafe.Pointer(&r), lib.l, &ar.s, &ar.a)) == false {
 		return nil, lib.lastError()
 	}
-	runtime.SetFinalizer(ar, ar.finalizer)
 	return ar, nil
 }
 
@@ -198,16 +191,11 @@ func (ar *Archive) Close() {
 	ar.a = nil
 }
 
-func (ar *Archive) finalizer(*Archive) {
-	ar.Close()
-}
-
 func (ar *Archive) Item(index int) (*Item, error) {
 	it := &Item{ar: ar}
 	if getBool(C.c7zArc_GetItemInfo(ar.a, C.uint(index), &it.i)) == false {
 		return nil, ar.lib.lastError()
 	}
-	runtime.SetFinalizer(it, it.finalizer)
 	return it, nil
 }
 
@@ -274,15 +262,6 @@ type Item struct {
 	ar *Archive
 }
 
-func (it *Item) finalizer(*Item) {
-	if it.i == nil {
-		return
-	}
-
-	//C.free(it.i)
-	it.i = nil
-}
-
 func (it *Item) Extract(w Writer) error {
 	if getBool(C.lib7zip_item_extract(it.ar.a, it.i, unsafe.Pointer(&w))) == false {
 		return it.ar.lib.lastError()
@@ -327,7 +306,7 @@ func (it *Item) PropertyFileTime(index PropertyIndex) (uint64, error) {
 func (it *Item) FullPath() string {
 	cval := C.c7zItm_GetFullPath(it.i)
 	path := getString(cval)
-	C.free(unsafe.Pointer(cval))
+	//C.free(unsafe.Pointer(cval))
 	return path
 }
 
