@@ -24,7 +24,7 @@ func (r *File) Size() (int64, error) {
 }
 
 func (r *File) SetSize(n int64) error {
-	return nil
+	return r.Truncate(n)
 }
 
 func (r *File) Ext() string {

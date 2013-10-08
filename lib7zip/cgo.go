@@ -212,7 +212,7 @@ func (ar *Archive) Item(index int) (*Item, error) {
 }
 
 func (ar *Archive) Extract(index int, w Writer) error {
-	if getBool(C.lib7zip_archive_extract(ar.a, C.uint(index), unsafe.Pointer(&w))) {
+	if getBool(C.lib7zip_archive_extract(ar.a, C.uint(index), unsafe.Pointer(&w))) == false {
 		return ar.lib.lastError()
 	}
 	return nil
@@ -228,7 +228,7 @@ func (ar *Archive) ExtractWithPassword(index int, w Writer, s string) error {
 		ws[i] = C.wchar_t(u16s[i])
 	}
 
-	if getBool(C.lib7zip_archive_extract_password(ar.a, C.uint(index), unsafe.Pointer(&w), &ws[0])) {
+	if getBool(C.lib7zip_archive_extract_password(ar.a, C.uint(index), unsafe.Pointer(&w), &ws[0])) == false {
 		return ar.lib.lastError()
 	}
 	return nil
@@ -343,7 +343,7 @@ func (it *Item) IsEncrypted() bool {
 	return getBool(C.c7zItm_IsEncrypted(it.i))
 }
 
-func (it *Item) ArchiveIndex() int {
+func (it *Item) Index() int {
 	return int(C.c7zItm_GetArchiveIndex(it.i))
 }
 
