@@ -8,14 +8,12 @@ import "C"
 
 import (
 	"errors"
+	"reflect"
 	"runtime"
 	"time"
-	"unsafe"
 	"unicode/utf16"
-	"reflect"
+	"unsafe"
 )
-
-// BUG(utkan): Doesn't handle unicode conversions (wchar_t* -> GoString) properly.
 
 var (
 	ErrUnknown      = errors.New("lib7zip: unknown error")
@@ -89,9 +87,9 @@ func getString(ws *C.wchar_t) string {
 	sliceHeader.Cap = length
 	sliceHeader.Len = length
 	sliceHeader.Data = uintptr(unsafe.Pointer(ws))
-	
+
 	s := make([]uint16, length)
-	for i:=0; i<length; i++ {
+	for i := 0; i < length; i++ {
 		s[i] = uint16(sl[i])
 	}
 
@@ -226,10 +224,10 @@ func (ar *Archive) ExtractWithPassword(index int, w Writer, s string) error {
 		return err
 	}
 	ws := make([]C.wchar_t, len(u16s)+1)
-	for i:=range u16s {
+	for i := range u16s {
 		ws[i] = C.wchar_t(u16s[i])
 	}
-	
+
 	if getBool(C.lib7zip_archive_extract_password(ar.a, C.uint(index), unsafe.Pointer(&w), &ws[0])) {
 		return ar.lib.lastError()
 	}

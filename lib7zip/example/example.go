@@ -60,12 +60,12 @@ func main() {
 		log.Fatal(err)
 	}
 	log.Println(n)
-	
+
 	it, err := ar.Item(2)
 	if err != nil {
 		log.Fatal("item:", err)
 	}
-	
+
 	t, err := it.PropertyFileTime(lib7zip.MTime)
 	if err != nil {
 		log.Fatal("filetime:", err)
