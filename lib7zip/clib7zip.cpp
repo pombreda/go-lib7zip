@@ -101,17 +101,17 @@ extern "C"
 	}
 
 	c7zip_EXPORT bool c7zItm_GetUInt64Property(c7z_ArchiveItem* self, int propertyIndex, unsigned __int64 * const val) {
-		return static_cast<C7ZipArchiveItem*>(self)->GetUInt64Property(propertyIndex, *val);
+		return static_cast<C7ZipArchiveItem*>(self)->GetUInt64Property((lib7zip::PropertyIndexEnum)propertyIndex, *val);
 	}
 
 	c7zip_EXPORT bool c7zItm_GetFileTimeProperty(c7z_ArchiveItem* self, int propertyIndex, unsigned __int64 * const val) {
-		return static_cast<C7ZipArchiveItem*>(self)->GetFileTimeProperty(propertyIndex, *val);
+		return static_cast<C7ZipArchiveItem*>(self)->GetFileTimeProperty((lib7zip::PropertyIndexEnum)propertyIndex, *val);
 	}
 
 	
 	c7zip_EXPORT bool c7zItm_GetStringProperty(c7z_ArchiveItem* self, int propertyIndex, wchar_t ** val) {
 		wstring _val;
-		if(!static_cast<C7ZipArchiveItem*>(self)->GetStringProperty(propertyIndex,  _val)) {
+		if(!static_cast<C7ZipArchiveItem*>(self)->GetStringProperty((lib7zip::PropertyIndexEnum)propertyIndex,  _val)) {
 			return false;
 		}
 
@@ -119,7 +119,7 @@ extern "C"
 	}
 
 	c7zip_EXPORT bool c7zItm_GetBoolProperty(c7z_ArchiveItem* self, int propertyIndex, bool * val) {
-		return static_cast<C7ZipArchiveItem*>(self)->GetBoolProperty(propertyIndex, *val);
+		return static_cast<C7ZipArchiveItem*>(self)->GetBoolProperty((lib7zip::PropertyIndexEnum)propertyIndex, *val);
 	}
 
 	// InStream
@@ -193,16 +193,16 @@ extern "C"
 	}
 
 	c7zip_EXPORT bool c7zArc_GetUInt64Property(c7z_Archive* self, int propertyIndex, unsigned __int64 * const val) {
-		return static_cast<C7ZipArchive*>(self)->GetUInt64Property( propertyIndex, *val);
+		return static_cast<C7ZipArchive*>(self)->GetUInt64Property( (lib7zip::PropertyIndexEnum)propertyIndex, *val);
 	}
 
 	c7zip_EXPORT bool c7zArc_GetBoolProperty(c7z_Archive* self, int propertyIndex, bool * const val) {
-		return static_cast<C7ZipArchive*>(self)->GetBoolProperty( propertyIndex, *val);
+		return static_cast<C7ZipArchive*>(self)->GetBoolProperty( (lib7zip::PropertyIndexEnum)propertyIndex, *val);
 	}
 
 	c7zip_EXPORT bool c7zArc_GetStringProperty(c7z_Archive* self, int propertyIndex, wchar_t ** val) {
 		wstring _val;
-		if(!static_cast<C7ZipArchive*>(self)->GetStringProperty(propertyIndex,  _val)) {
+		if(!static_cast<C7ZipArchive*>(self)->GetStringProperty((lib7zip::PropertyIndexEnum)propertyIndex,  _val)) {
 			return false;
 		}
 
@@ -210,7 +210,7 @@ extern "C"
 	}
 
 	c7zip_EXPORT bool c7zArc_GetFileTimeProperty(c7z_Archive* self, int propertyIndex, unsigned __int64 * const val) {
-		return static_cast<C7ZipArchive*>(self)->GetFileTimeProperty( propertyIndex, *val);
+		return static_cast<C7ZipArchive*>(self)->GetFileTimeProperty( (lib7zip::PropertyIndexEnum)propertyIndex, *val);
 	}
 
 	//Library

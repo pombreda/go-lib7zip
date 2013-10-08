@@ -1,6 +1,6 @@
 package lib7zip
 
-// #cgo CXXFLAGS: -std=c++11  -I. -fpermissive
+// #cgo CXXFLAGS: -std=c++11  -I.
 // #cgo LDFLAGS: -l7zip -ldl
 // #include "wrap.h"
 // #include <stdlib.h>
